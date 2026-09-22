@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CIA Bucks</title>
+<link rel="stylesheet" href="assets/styles.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='26'>&#128176;</text></svg>">
+</head>
+<body>
+<canvas id="confetti-canvas" aria-hidden="true" style="position:fixed;inset:0;pointer-events:none;z-index:60"></canvas>
+
+<!-- ------------------------------------------------------------ sign in -->
+<section id="gate" class="gate">
+  <div class="gate-inner">
+    <div id="gate-seal"></div>
+    <h1>CIA Bucks<em>Top Farmers Agent</em></h1>
+    <div class="rule"></div>
+    <p>Spin the wheel, collect your bucks, watch the balance climb. Every deposit is on the books.</p>
+    <div id="gate-error" class="notice"></div>
+    <div id="gsi-button"></div>
+    <p class="fineprint">
+      Sign in with your <b id="domain-label">@topfarmersagent.com</b> account.<br>
+      Personal Gmail accounts will be turned away.
+    </p>
+  </div>
+</section>
+
+<!-- --------------------------------------------------------------- app -->
+<header id="masthead" class="masthead hidden">
+  <div id="mast-seal"></div>
+  <div class="wordmark"><b>CIA Bucks</b><span>Top Farmers Agent</span></div>
+  <nav>
+    <a id="admin-link" class="btn btn-sm hidden" href="admin.html">Admin</a>
+    <a id="txn-link" class="btn btn-sm hidden" href="transactions.html">Transactions</a>
+    <button id="sign-out" class="btn btn-sm">Sign out</button>
+    <div class="who">
+      <img id="avatar" alt="" hidden>
+      <small id="whoami"></small>
+    </div>
+  </nav>
+</header>
+
+<main id="app" class="hidden">
+  <div id="msg" class="notice"></div>
+
+  <div class="floor" id="floor">
+    <!-- left: stats + note + ledger -->
+    <div>
+      <p class="eyebrow" id="stats-eyebrow">Daily stats</p>
+
+      <section class="stats-card" id="stats-card">
+        <div id="stats-entry">
+          <div class="stat-inputs">
+            <div><label for="in-transfers">Transfers</label>
+              <input id="in-transfers" type="number" min="0" step="1" inputmode="numeric" placeholder="0"></div>
+            <div><label for="in-occs">One-Call-Closes</label>
+              <input id="in-occs" type="number" min="0" step="1" inputmode="numeric" placeholder="0"></div>
+          </div>
+          <p class="earn-preview" id="earn-preview"></p>
+          <button id="submit-stats" class="btn btn-solid">Log stats &amp; earn spins</button>
+          <p class="fineprint" id="rules-note">Log once a day. Spins are only earned here.</p>
+        </div>
+        <div id="stats-done" class="hidden">
+          <p class="done-lead">Today's numbers are in.</p>
+          <dl class="done-grid">
+            <div><dt>Transfers</dt><dd id="done-transfers">0</dd></div>
+            <div><dt>OCCs</dt><dd id="done-occs">0</dd></div>
+            <div><dt>Spins earned</dt><dd id="done-earned" class="lit">0</dd></div>
+          </dl>
+          <p class="fineprint">New stats unlock tomorrow. Spend your spins on the wheel.</p>
+        </div>
+        <div id="stats-locked" class="hidden">
+          <p class="done-lead">Spins are awarded by your team lead.</p>
+          <p class="fineprint">Your team lead gives you points, and each one becomes a spin. Spend them on the wheel whenever they land.</p>
+        </div>
+      </section>
+
+      <p class="eyebrow" id="bank-eyebrow" style="margin-top:34px">Your bank</p>
+
+      <div class="note">
+        <div class="note-top">
+          <p class="eyebrow">CIA Bucks &middot; on deposit</p>
+          <span class="note-serial" id="serial">TFA 0000 000</span>
+        </div>
+        <div class="amount"><sup>$</sup><span id="balance">0</span></div>
+        <div class="note-words" id="balance-words">Zero bucks and no cents</div>
+        <div class="note-awards" id="note-awards">
+          <div class="awards-head">
+            <span class="awards-label">Home Run Awards</span>
+            <span class="awards-count" id="awards-count"></span>
+          </div>
+          <div class="awards-icons" id="awards-icons"></div>
+          <span class="awards-cap" id="awards-cap">3 baseballs = $2,000 experience</span>
+        </div>
+        <div class="note-awards" id="note-mvp">
+          <div class="awards-head">
+            <span class="awards-label">MVP Awards</span>
+            <span class="awards-count" id="mvp-count"></span>
+          </div>
+          <div class="awards-icons" id="mvp-icons"></div>
+          <span class="awards-cap" id="mvp-cap">Each MVP = $300 experience</span>
+        </div>
+        <dl class="note-foot">
+          <div><dt>Spins taken</dt><dd id="spin-count">0</dd></div>
+          <div><dt>Last deposit</dt><dd id="last-deposit">—</dd></div>
+          <div><dt>Member since</dt><dd id="member-since">—</dd></div>
+        </dl>
+        <div class="stamp" id="stamp">Deposited</div>
+      </div>
+
+      <section class="ledger" id="deposit-history">
+        <h2>Deposit history</h2>
+        <table>
+          <thead><tr>
+            <th>Date</th><th>Entry</th><th class="num">Amount</th><th class="num">Balance</th>
+          </tr></thead>
+          <tbody id="ledger-body"></tbody>
+        </table>
+        <p id="ledger-empty" class="empty hidden">Nothing on the books yet. Take your first spin.</p>
+      </section>
+
+      <section class="ledger hidden" id="team-panel">
+        <h2>Your team</h2>
+        <p class="fineprint" style="margin-top:-6px">Trigger a re-log so a teammate can enter today's stats again. Spins they already earned today stay.</p>
+        <div class="scroll" style="max-height:340px">
+          <table>
+            <thead><tr><th>Member</th><th>Today's stats</th><th></th></tr></thead>
+            <tbody id="team-body"></tbody>
+          </table>
+        </div>
+        <p id="team-empty" class="empty hidden">No teammates have signed in yet.</p>
+      </section>
+
+      <section class="ledger hidden" id="points-panel">
+        <h2>Award points</h2>
+        <p class="fineprint" style="margin-top:-6px">Give points to a teammate — mainly Service, whose spins come only from points. Each point is one spin. Negative removes points.</p>
+        <div class="points-grid">
+          <select id="points-email"></select>
+          <input id="points-amount" type="number" step="1" inputmode="numeric" placeholder="Points (e.g. 3 or -1)">
+          <input id="points-note" placeholder="Reason (optional)">
+          <button id="points-go" class="btn btn-solid">Award points</button>
+        </div>
+      </section>
+    </div>
+
+    <!-- right: the wheel -->
+    <div class="stage" id="stage">
+      <p class="eyebrow">The wheel</p>
+      <div class="wheel-wrap">
+        <svg class="pointer" width="30" height="30" viewBox="0 0 30 30" aria-hidden="true">
+          <path d="M15 27 L4 4 L26 4 Z" fill="#c9a227" stroke="#081321" stroke-width="1.5"/>
+        </svg>
+        <div id="wheel-host"></div>
+      </div>
+      <div class="spins-ready" id="spins-ready"><b id="spins-count">0</b> spins ready</div>
+      <button id="spin" class="btn btn-solid spin-btn" disabled>Spin</button>
+      <button id="spin-all" class="btn spin-all-btn hidden">Spin all</button>
+      <p class="spin-status" id="spin-status">Loading your account…</p>
+      <button id="mute" class="mute-btn">Sound on</button>
+    </div>
+  </div>
+</main>
+
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script src="assets/config.js"></script>
+<script src="assets/common.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>
