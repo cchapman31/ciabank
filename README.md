@@ -103,7 +103,7 @@ The Apps Script web app does three things the browser can't be trusted with:
 1. Go to [console.cloud.google.com](https://console.cloud.google.com/) and create a project
    (or reuse one).
 2. **APIs & Services → OAuth consent screen.** Choose **Internal** if the Google Workspace
-   account you're signed in as owns `topfarmersagent.com` — that alone blocks outside
+   account you're signed in as owns `topinsuranceagent.com` — that alone blocks outside
    accounts. Otherwise choose **External** and publish it; the domain rule in the code
    still holds the line.
 3. **APIs & Services → Credentials → Create credentials → OAuth client ID → Web application.**
@@ -143,7 +143,7 @@ Cody's account to reach the admin area — the link also appears in the header f
 
 ## How the pieces behave
 
-**Who can get in.** Anyone with a `@topfarmersagent.com` address, plus anyone listed on the
+**Who can get in.** Anyone with a `@topinsuranceagent.com` address, plus anyone listed on the
 `Admins` tab. That second rule is what lets `cody@insurancesaleslab.com` in from a different
 domain. To change the member domain later, use **Allowed domain** in the admin settings.
 
