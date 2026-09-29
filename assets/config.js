@@ -4,7 +4,7 @@ window.CIA_CONFIG = {
   GOOGLE_CLIENT_ID: '928081732334-jiet7kj4lvngncjbjot6vc541fbf9ldk.apps.googleusercontent.com',
 
   // Apps Script > Deploy > Web app > the /exec URL
-  API_URL: 'https://script.google.com/macros/s/AKfycbzDrRapkQjQAKULiyrf0QuMLLXHc2EyH154TzJ5eV0PjZuPgYoukZ7otwAVR7MexDsN/exec',
+  API_URL: 'https://script.google.com/macros/s/AKfycbxGbLokK4CjySSYO8AEpeEX2-swEgIONsZF-geEGy_zN98kZDfCzJJUL6Yx_RVCcsfu/exec',
 
   // Shown on the sign-in screen. The server enforces this too.
   ALLOWED_DOMAIN: 'topinsuranceagent.com'
